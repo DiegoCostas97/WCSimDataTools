@@ -23,7 +23,7 @@ def main():
 
     parser.add_argument( "infiles", type=str, nargs="+", help = ".root files")
     parser.add_argument( "-o", "--outpath", type=str, nargs="?", help = ".hdf5 file path", default=".")
-    
+
     args = parser.parse_args()
 
     ROOT.gSystem.AddDynamicPath(args.wcsimlib)
@@ -34,7 +34,7 @@ def main():
 
     for f, root_fname in enumerate(root_fnames, 1):
 
-        if args.verbose: 
+        if args.verbose:
             print(f"Processing file ({f}/{len(root_fnames)}):", root_fname.split("/")[-1])
             print("----------------")
 
@@ -101,6 +101,7 @@ def main():
         dhits_group   = h5f.create_group  (wcsimT_group, "CherenkovDigiHits", "CherenkovDigiHits")
         dhits_table   = h5f.create_table  ( dhits_group,          "DigiHits", CherenkovDigiHits, "DigiHits")
         photonids_arr = h5f.create_vlarray( dhits_group,         "PhotonIDs",    tb.Int64Atom(), "PhotonIDs")
+        # hitCreators_arr = h5f.create_vlarray( dhits_group, "DigihitsCreator", tb.StringAtom(), "DigihitsCreator")
 
         tree  = rootf.GetKey("wcsimT").ReadObj()
         nevents = tree.GetEntries()
@@ -112,7 +113,7 @@ def main():
             tree.GetEvent(event_i)
             ntriggers = tree.wcsimrootevent.GetNumberOfEvents()
             if args.verbose: print(f"Number of triggers in event {event_i}: {ntriggers}".ljust(50))
-            
+
             for trigger_i in range(ntriggers):
                 trigger = tree.wcsimrootevent.GetTrigger(trigger_i)
 
@@ -176,6 +177,7 @@ def main():
                     row["Parenttype"] = t.GetParenttype()
                     row["Time"]       = t.GetTime()
                     row["Id"]         = t.GetId()
+                    row["CreatorProcessName"] = t.GetCreatorProcessName()
                     row.append()
                 tracks_table.flush()
 
@@ -211,6 +213,7 @@ def main():
                     row["PhotonStartTime"] = h.GetPhotonStartTime()
                     for i in range(3): row[f"PhotonStartPos_x{i}"] = h.GetPhotonStartPos(i)
                     for i in range(3): row[f"PhotonEndPos_x{i}"]   = h.GetPhotonEndPos  (i)
+                    row["PhotonCreatorProcessName"] = h.GetPhotonCreatorProcessName()
                     row.append()
                 chitts_table.flush()
 
@@ -232,8 +235,16 @@ def main():
                     row.append()
 
                     photonids_arr.append(list(h.GetPhotonIds()))
+                    # trueHitsInfo = []
+                    # for photon_id in list(h.GetPhotonIds()):
+                        # trueHitsInfo.append(hit_times.At(photon_id))
+
+                    # for info in trueHitsInfo:
+                        # hitCreators_arr.append(info.GetPhotonCreatorProcessName())
+
                 dhits_table  .flush()
                 photonids_arr.flush()
+                # hitCreators_arr.flush()
 
         triggers_table.flush()
 
@@ -241,7 +252,7 @@ def main():
         #    wcsimRootOptionsT
         # -----------------------
         options_table = h5f.create_table("/", "wcsimRootOptionsT", Options, "wcsimRootOptionsT")
-        
+
         tree = rootf.GetKey("wcsimRootOptionsT").ReadObj()
         tree.GetEvent(0)
         options = tree.wcsimrootoptions

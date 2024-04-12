@@ -1,5 +1,6 @@
 import tables as tb
 import pandas as pd
+import numpy  as np
 
 from os.path import expandvars
 
@@ -12,7 +13,7 @@ def explore_file(filename):
 def read_table(filename, path):
     "Real the full table in :path: inside :filename:"
     filename = expandvars(filename)
-    
+
     with tb.open_file(filename) as h5f:
         table = h5f.root.__getattr__(path)
         if not hasattr   (h5f.root, path) : raise Exception(":path: not found in :filename:")
@@ -30,4 +31,9 @@ def read_table(filename, path):
         except ValueError:
             df = table.read()
     return df
+
+def read_photonIDs(filename : str, path : str) -> np.ndarray:
+    with tb.open_file(filename) as f:
+        pids = f.root.wcsimT.CherenkovDigiHits.PhotonIDs.read()
+    return pids
 

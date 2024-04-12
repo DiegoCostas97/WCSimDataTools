@@ -40,6 +40,7 @@ class Tracks(tb.IsDescription):
     Parenttype   = tb.Int64Col  (pos=24)
     Time         = tb.Float64Col(pos=25)
     Id           = tb.Int64Col  (pos=26)
+    CreatorProcessName = tb.StringCol(pos=27, itemsize=100)
 
 
 class Triggers(tb.IsDescription):
@@ -99,6 +100,7 @@ class CherenkovHitTimes(tb.IsDescription):
     PhotonEndPos_x0   = tb.Float64Col(pos=11)
     PhotonEndPos_x1   = tb.Float64Col(pos=12)
     PhotonEndPos_x2   = tb.Float64Col(pos=13)
+    PhotonCreatorProcessName = tb.StringCol(pos=14, itemsize=100)
 
 
 class CherenkovDigiHits(tb.IsDescription):
