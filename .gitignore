@@ -1,5 +1,6 @@
 # .gitignore file adapted from https://github.com/github/gitignore.git
 *.h5
+*.hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
