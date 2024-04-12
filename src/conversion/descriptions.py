@@ -2,7 +2,7 @@ import tables as tb
 
 
 class Settings(tb.IsDescription):
-    GitHash     = tb.StringCol (pos=0, itemsize=100)
+    GitHash     = tb.StringCol (pos=0, itemsize=50)
     WCDetRadius = tb.Float32Col(pos=1)
     WCDetHeight = tb.Float32Col(pos=2)
     WCDetCentre = tb.Float32Col(pos=3, shape=(3,))
@@ -40,7 +40,7 @@ class Tracks(tb.IsDescription):
     Parenttype   = tb.Int64Col  (pos=24)
     Time         = tb.Float64Col(pos=25)
     Id           = tb.Int64Col  (pos=26)
-    CreatorProcessName = tb.StringCol(pos=27, itemsize=100)
+    CreatorProcessName = tb.StringCol(pos=27, itemsize=20)
 
 
 class Triggers(tb.IsDescription):
@@ -66,7 +66,7 @@ class Triggers(tb.IsDescription):
     Ncherenkovhittimes = tb.Int64Col (pos=18)
     Ncherenkovdigihits = tb.Int64Col (pos=19)
     SumQ              = tb.Float64Col(pos=20)
-    TriggerType       = tb.StringCol (pos=21, itemsize=50)
+    TriggerType       = tb.StringCol (pos=21, itemsize=10)
     # TriggerInfo       = tb.Float64Col(pos=20, shape=10)
 
 
@@ -100,7 +100,7 @@ class CherenkovHitTimes(tb.IsDescription):
     PhotonEndPos_x0   = tb.Float64Col(pos=11)
     PhotonEndPos_x1   = tb.Float64Col(pos=12)
     PhotonEndPos_x2   = tb.Float64Col(pos=13)
-    PhotonCreatorProcessName = tb.StringCol(pos=14, itemsize=100)
+    PhotonCreatorProcessName = tb.StringCol(pos=14, itemsize=20)
 
 
 class CherenkovDigiHits(tb.IsDescription):
@@ -141,7 +141,7 @@ class PMT(tb.IsDescription):
 
 
 class Options(tb.IsDescription):
-    DetectorName                  = tb.StringCol (pos=0, itemsize=100)
+    DetectorName                  = tb.StringCol (pos=0, itemsize=50)
     SavePi0                       = tb.BoolCol   (pos=1)
     PMTQEMethod                   = tb.Int64Col  (pos=2)
     PMTCollEff                    = tb.Int64Col  (pos=3)
@@ -151,12 +151,12 @@ class Options(tb.IsDescription):
     DarkLow                       = tb.Float64Col(pos=7)
     DarkWindow                    = tb.Float64Col(pos=8)
     DarkMode                      = tb.Int64Col  (pos=9)
-    DigitizerClassName            = tb.StringCol (pos=10, itemsize=50)
+    DigitizerClassName            = tb.StringCol (pos=10, itemsize=10)
     DigitizerDeadTime             = tb.Int64Col  (pos=11)
     DigitizerIntegrationWindow    = tb.Int64Col  (pos=12)
     DigitizerTimingPrecision      = tb.Float64Col(pos=13)
     DigitizerPEPrecision          = tb.Float64Col(pos=14)
-    TriggerClassName              = tb.StringCol (pos=15, itemsize=50)
+    TriggerClassName              = tb.StringCol (pos=15, itemsize=10)
     MultiDigitsPerTrigger         = tb.BoolCol   (pos=16)
     NDigitsThreshold              = tb.Int64Col  (pos=17)
     NDigitsWindow                 = tb.Int64Col  (pos=18)

@@ -9,6 +9,7 @@ uproot.default_library = "np"
 
 from .descriptions import *
 from os.path       import expandvars, realpath, join
+from tqdm import tqdm
 
 def main():
 
@@ -101,7 +102,7 @@ def main():
         dhits_group   = h5f.create_group  (wcsimT_group, "CherenkovDigiHits", "CherenkovDigiHits")
         dhits_table   = h5f.create_table  ( dhits_group,          "DigiHits", CherenkovDigiHits, "DigiHits")
         photonids_arr = h5f.create_vlarray( dhits_group,         "PhotonIDs",    tb.Int64Atom(), "PhotonIDs")
-        # hitCreators_arr = h5f.create_vlarray( dhits_group, "DigihitsCreator", tb.StringAtom(), "DigihitsCreator")
+        hitCreators_arr = h5f.create_vlarray( dhits_group, "DigihitsCreator", tb.StringAtom(itemsize=20), "DigihitsCreator")
 
         tree  = rootf.GetKey("wcsimT").ReadObj()
         nevents = tree.GetEntries()
@@ -109,7 +110,7 @@ def main():
 
         triggers_row = triggers_table.row
 
-        for event_i in range(nevents):
+        for event_i in tqdm(range(nevents)):
             tree.GetEvent(event_i)
             ntriggers = tree.wcsimrootevent.GetNumberOfEvents()
             if args.verbose: print(f"Number of triggers in event {event_i}: {ntriggers}".ljust(50))
@@ -235,16 +236,24 @@ def main():
                     row.append()
 
                     photonids_arr.append(list(h.GetPhotonIds()))
-                    # trueHitsInfo = []
-                    # for photon_id in list(h.GetPhotonIds()):
-                        # trueHitsInfo.append(hit_times.At(photon_id))
-
-                    # for info in trueHitsInfo:
-                        # hitCreators_arr.append(info.GetPhotonCreatorProcessName())
+                    # print(CHitsT)
+                    if len(CHitsT) != 0:
+                        temp_hitCreators = []
+                        trueHitsInfo = []
+                        for photon_id in list(h.GetPhotonIds()):
+                            # print(photon_id)
+                            trueHitsInfo.append(CHitsT.At(photon_id))
+                        # print(trueHitsInfo)
+                        for info in trueHitsInfo:
+                            # print(info)
+                            # print(info.GetPhotonCreatorProcessName())
+                            temp_hitCreators.append(info.GetPhotonCreatorProcessName())
+                            # print(temp_hitCreators)
+                    hitCreators_arr.append(temp_hitCreators)
 
                 dhits_table  .flush()
                 photonids_arr.flush()
-                # hitCreators_arr.flush()
+                hitCreators_arr.flush()
 
         triggers_table.flush()
 
