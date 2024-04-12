@@ -32,8 +32,13 @@ def read_table(filename, path):
             df = table.read()
     return df
 
-def read_photonIDs(filename : str, path : str) -> np.ndarray:
+def read_photonIDs(filename : str, path : str) -> list:
     with tb.open_file(filename) as f:
         pids = f.root.wcsimT.CherenkovDigiHits.PhotonIDs.read()
     return pids
+
+def read_digihitsCreator(filename : str, path : str) -> list:
+    with tb.open_file(filename) as f:
+        dhCr = f.root.wcsimT.CherenkovDigiHits.DigihitsCreator.read()
+    return dhCr
 
