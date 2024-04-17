@@ -103,6 +103,7 @@ def main():
         dhits_table   = h5f.create_table  ( dhits_group,          "DigiHits", CherenkovDigiHits, "DigiHits")
         photonids_arr = h5f.create_vlarray( dhits_group,         "PhotonIDs",    tb.Int64Atom(), "PhotonIDs")
         hitCreators_arr = h5f.create_vlarray( dhits_group, "DigihitsCreator", tb.StringAtom(itemsize=20), "DigihitsCreator")
+        hitPhotonId_arr = h5f.create_vlarray( dhits_group, "DigiHitsPhotonIdParent", tb.Int64Atom(), "PhotonIdParent")
 
         tree  = rootf.GetKey("wcsimT").ReadObj()
         nevents = tree.GetEntries()
@@ -240,6 +241,7 @@ def main():
                     # print(CHitsT)
                     if len(CHitsT) != 0:
                         temp_hitCreators = []
+                        temp_hitPhotonId = []
                         trueHitsInfo = []
                         for photon_id in list(h.GetPhotonIds()):
                             # print(photon_id)
@@ -249,12 +251,15 @@ def main():
                             # print(info)
                             # print(info.GetPhotonCreatorProcessName())
                             temp_hitCreators.append(info.GetPhotonCreatorProcessName())
+                            temp_hitPhotonId.append(info.GetParentID())
                             # print(temp_hitCreators)
                     hitCreators_arr.append(temp_hitCreators)
+                    hitPhotonId_arr.append(temp_hitPhotonId)
 
                 dhits_table  .flush()
                 photonids_arr.flush()
                 hitCreators_arr.flush()
+                hitPhotonId_arr.flush()
 
         triggers_table.flush()
 
