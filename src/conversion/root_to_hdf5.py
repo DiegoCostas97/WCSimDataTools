@@ -176,6 +176,7 @@ def main():
                     for i in range(3): row[f"Start_x{i}"] = t.GetStart(i)
                     for i in range(3): row[ f"Stop_x{i}"] = t.GetStop (i)
                     row["Parenttype"] = t.GetParenttype()
+                    row["ParentId"]   = t.GetParentId()
                     row["Time"]       = t.GetTime()
                     row["Id"]         = t.GetId()
                     row["CreatorProcessName"] = t.GetCreatorProcessName()

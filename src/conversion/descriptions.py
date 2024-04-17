@@ -38,9 +38,10 @@ class Tracks(tb.IsDescription):
     Start_x1     = tb.Float64Col(pos=22)
     Start_x2     = tb.Float64Col(pos=23)
     Parenttype   = tb.Int64Col  (pos=24)
-    Time         = tb.Float64Col(pos=25)
-    Id           = tb.Int64Col  (pos=26)
-    CreatorProcessName = tb.StringCol(pos=27, itemsize=20)
+    ParentId     = tb.Int64Col  (pos=25)
+    Time         = tb.Float64Col(pos=26)
+    Id           = tb.Int64Col  (pos=27)
+    CreatorProcessName = tb.StringCol(pos=28, itemsize=20)
 
 
 class Triggers(tb.IsDescription):
