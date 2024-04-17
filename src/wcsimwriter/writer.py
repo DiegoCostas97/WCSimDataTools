@@ -18,7 +18,7 @@ def storeMultidimArray(array, dtype):
 # Definir la ruta del archivo HDF5 de salida
 # output_file = "/Users/diiego/software/WCSimDataTools/filtered_ambeSourceData.hdf5"
 
-def writer(outputfile):
+def write(outputfile):
 # Crear el archivo HDF5 y los grupos necesarios
     with h5py.File(output_file, mode='w') as f:
         # Settings
