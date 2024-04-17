@@ -116,7 +116,10 @@ def main():
             ntriggers = tree.wcsimrootevent.GetNumberOfEvents()
             if args.verbose: print(f"Number of triggers in event {event_i}: {ntriggers}".ljust(50))
 
+            hitTimes = 0
+
             for trigger_i in range(ntriggers):
+                # print(f"Processing Trigger: {trigger_i}")
                 trigger = tree.wcsimrootevent.GetTrigger(trigger_i)
 
                 header       = trigger.GetHeader()
@@ -154,6 +157,7 @@ def main():
                 CHits  = trigger.GetCherenkovHits()
                 CHitsT = trigger.GetCherenkovHitTimes()
                 DHits  = trigger.GetCherenkovDigiHits()
+                hitTimes = trigger.GetCherenkovHitTimes() if trigger_i == 0 else hitTimes
 
                 # tracks
                 row = tracks_table.row
@@ -223,6 +227,7 @@ def main():
                 # DHits
                 row = dhits_table.row
                 n   = DHits.GetEntries()
+                # print(f"DHits.GetEntries(): {n}")
                 for i in range(n):
                     h = DHits[i]
                     row["Run"]          = run
@@ -231,28 +236,30 @@ def main():
                     row["SubEvtNumber"] = subevtnumber
                     row["dhit"]       = i
                     row["Q"]          = h.GetQ()
-                    row["T"]          = h.GetT()
+                    row["T"]          = h.GetT() + date
                     row["TubeID"]     = h.GetTubeId()
                     row["mPMTID"]     = h.GetmPMTId()
                     row["mPMT_PMTID"] = h.GetmPMT_PMTId()
                     row.append()
 
                     photonids_arr.append(list(h.GetPhotonIds()))
+                    # print(list(h.GetPhotonIds()))
                     # print(CHitsT)
-                    if len(CHitsT) != 0:
-                        temp_hitCreators = []
-                        temp_hitPhotonId = []
-                        trueHitsInfo = []
-                        for photon_id in list(h.GetPhotonIds()):
-                            # print(photon_id)
-                            trueHitsInfo.append(CHitsT.At(photon_id))
-                        # print(trueHitsInfo)
-                        for info in trueHitsInfo:
-                            # print(info)
-                            # print(info.GetPhotonCreatorProcessName())
-                            temp_hitCreators.append(info.GetPhotonCreatorProcessName())
-                            temp_hitPhotonId.append(info.GetParentID())
-                            # print(temp_hitCreators)
+                    # if len(CHitsT) != 0:
+                    temp_hitCreators = []
+                    temp_hitPhotonId = []
+                    trueHitsInfo = []
+                    for photon_id in list(h.GetPhotonIds()):
+                        # print(photon_id)
+                        trueHitsInfo.append(hitTimes.At(photon_id))
+                    # print(trueHitsInfo)
+                    for info in trueHitsInfo:
+                        # print(info)
+                        # print(info.GetPhotonCreatorProcessName())
+                        temp_hitCreators.append(info.GetPhotonCreatorProcessName())
+                        temp_hitPhotonId.append(info.GetParentID())
+                        # print(temp_hitPhotonId)
+                        # print(temp_hitCreators)
                     hitCreators_arr.append(temp_hitCreators)
                     hitPhotonId_arr.append(temp_hitPhotonId)
 
