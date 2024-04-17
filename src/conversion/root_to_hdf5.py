@@ -249,7 +249,7 @@ def main():
 
                     for info in trueHitsInfo:
                         temp_hitPhotonId.append(info.GetParentID())
-                    hitCreators_arr.append(temp_hitCreators)
+
                     hitPhotonId_arr.append(temp_hitPhotonId)
 
                 dhits_table  .flush()
