@@ -2,6 +2,7 @@ import numpy  as np
 import pandas as pd
 
 from typing import Union, List
+from tqdm.notebook import tqdm
 
 def evt_filter(evts: Union[int, List[int]], dfs: List[pd.core.frame.DataFrame]) -> List[pd.core.frame.DataFrame]:
     #Filter Pandas DataFrame by Event Number (EvtNum)
