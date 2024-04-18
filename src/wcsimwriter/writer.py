@@ -3,6 +3,13 @@ import pandas as pd
 import h5py
 
 def adjust_dtype(df, itemsize):
+    """
+    When trying to store an array with one or more elements with type 'O', specially
+    after storing that array as a Pandas object, in a HDF5 file, you need to restore every 
+    element with type 'O' to its original (or at least one supported by HDF5) type.
+
+    This function performs this type conversion for Pandas DataFrame columns.
+    """
     arrays    = [df[col].to_numpy() for col in df.columns]
     formats   = [array.dtype if array.dtype != 'O' else array.astype("S"+str(itemsize)).dtype for array in arrays]
     rec_array = np.rec.fromarrays(arrays, dtype={'names': df.columns, 'formats': formats})
@@ -10,16 +17,21 @@ def adjust_dtype(df, itemsize):
     return rec_array
 
 def storeMultidimArray(array, dtype):
+    """
+    Storing in an HDF5 file a multidimensional and variable legth numpy array require making
+    some adjustments in the type of the array.
+
+    This functino performs that type conversion.
+    """
     array = np.array([i.astype(dtype) for i in array], dtype=np.object_)
     dt_array = h5py.special_dtype(vlen=dtype)
 
     return array, dt_array
 
-# Definir la ruta del archivo HDF5 de salida
-# output_file = "/Users/diiego/software/WCSimDataTools/filtered_ambeSourceData.hdf5"
 
-def write(outputfile):
-# Crear el archivo HDF5 y los grupos necesarios
+def write(output_file, settings_df, roptions_df, geometry_df, pmt_df, hittimes_df, cherhits_df,
+          tracks_df, triggers_df, df_final_cher, photonid_df, photparn_df):
+    # Open the file
     with h5py.File(output_file, mode='w') as f:
         # Settings
         settings_dset = f.create_dataset("Settings", data=settings_df)
