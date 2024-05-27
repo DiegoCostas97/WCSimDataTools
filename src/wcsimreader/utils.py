@@ -17,7 +17,7 @@ def read_table(filename, path):
     with tb.open_file(filename) as h5f:
         table = h5f.root.__getattr__(path)
         if not hasattr   (h5f.root, path) : raise Exception(":path: not found in :filename:")
-        if not isinstance(table, tb.Table): raise Exception(":path: is not a table in :filename:")
+        # if not isinstance(table, tb.Table): raise Exception(":path: is not a table in :filename:")
 
         # if table.nrows == 1:
         #     sets    = table.read()

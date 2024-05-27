@@ -235,7 +235,7 @@ def main():
                     row["SubEvtNumber"] = subevtnumber
                     row["dhit"]       = i
                     row["Q"]          = h.GetQ()
-                    row["T"]          = h.GetT() + date
+                    row["T"]          = h.GetT()
                     row["TubeID"]     = h.GetTubeId()
                     row["mPMTID"]     = h.GetmPMTId()
                     row["mPMT_PMTID"] = h.GetmPMT_PMTId()

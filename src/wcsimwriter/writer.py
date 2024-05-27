@@ -41,16 +41,16 @@ def write(output_file, settings_df, roptions_df, geometry_df, pmt_df, hittimes_d
 
         # wcsimGeoT
         wcsimGeoTGeometry_dset = f.create_dataset("/wcsimGeoT/Geometry", data=geometry_df)
-        wcsimGeoTPMT_dset      = f.create_dataset("/wcsimGeoT/PMT",      data=pmt_df)
+        wcsimGeoTPMT_dset      = f.create_dataset("/wcsimGeoT/PMT",      data=pmt_df.to_records(index=False))
 
         # wcsimT # Any DF that has a string like column need the adjust_dtype function
         wcsimTCherenkovHitTimes = f.create_dataset("/wcsimT/CherenkovHitTimes", data=adjust_dtype(hittimes_df, 20))
-        wcsimTCherenkovHits     = f.create_dataset("/wcsimT/CherenkovHits",     data=cherhits_df)
+        wcsimTCherenkovHits     = f.create_dataset("/wcsimT/CherenkovHits",     data=cherhits_df.to_records(index=False))
         wcsimTTracks            = f.create_dataset("/wcsimT/Tracks",            data=adjust_dtype(tracks_df,   20))
         wcsimTTriggers          = f.create_dataset("/wcsimT/Triggers",          data=adjust_dtype(triggers_df, 10))
 
         # wcsimT/CherenkovDigiHits
-        wcsimTCherenkovDigiHitsDigiHits = f.create_dataset("/wcsimT/CherenkovDigiHits/DigiHits", data=df_final_cher)
+        wcsimTCherenkovDigiHitsDigiHits = f.create_dataset("/wcsimT/CherenkovDigiHits/DigiHits", data=df_final_cher.to_records(index=False))
 
         # Needed in order to store the multidimensional variable length array photonIDs is (this cannot be done in PyTables as long as I know)
         photonid_df, dt_photonid = storeMultidimArray(photonid_df, np.int32)
